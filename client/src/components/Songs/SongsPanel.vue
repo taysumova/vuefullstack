@@ -1,16 +1,16 @@
 <template>
-  <panel title="Songs">
-    <v-btn slot="action" class="cyan accent-2" fab absolute right light>
+  <panel title="Список моих песен">
+    <v-btn slot="action" class="teal accent-2" fab absolute right light>
       <router-link :to="{name: 'songs-create'}">
         <v-icon>add</v-icon>
       </router-link>
     </v-btn>
     <div class="song" v-for="song in songs" :key="song.id">
-      <v-layout>
+      <v-layout row justify-center>
         <v-flex xs6>
           <img class="album-image" :src="song.albumImageUrl" alt="Album cover">
         </v-flex>
-        <v-flex xs6>
+        <v-flex xs6 center class="pt-4 pl-2 pr-2 pb-2">
           <div class="song-title">
             {{song.title}}
           </div>
@@ -20,8 +20,14 @@
           <div class="song-genre">
             {{song.genre}}
           </div>
-          <v-btn class="cyan" dark @click="navigateTo({name: 'song', params: {songId: song.id}})">
-            view
+          <v-btn
+            class="teal darken-4"
+            dark
+            :to="{
+              name: 'song',
+              params: {songId: song.id}
+            }">
+            Открыть
           </v-btn>
         </v-flex>
       </v-layout>
@@ -30,28 +36,24 @@
 </template>
 <script>
 import SongsService from '@/services/SongsService'
-import Panel from '@/components/Panel'
 export default {
   name: 'Songs',
-  components: {
-    Panel
-  },
   data () {
     return {
       songs: []
     }
   },
-  async mounted () {
-    this.songs = (await SongsService.getAllSongs()).data
-  },
-  methods: {
-    navigateTo (route) {
-      this.$router.push(route)
+  watch: {
+    '$route.query.search': {
+      immediate: true,
+      async handler (value) {
+        this.songs = (await SongsService.getAllSongs(value)).data
+      }
     }
   }
 }
 </script>
-<style>
+<style scoped>
 a {
   text-decoration: none;
 }
@@ -70,7 +72,7 @@ a {
   font-style: italic;
 }
 .album-image {
-  width: 70%;
+  width: 100%;
   height: 100%;
   margin: 0 auto;
   object-fit: contain;

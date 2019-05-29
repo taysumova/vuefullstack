@@ -1,13 +1,13 @@
 <template>
-    <panel title="Song Metadata">
-      <v-layout>
-        <v-flex xs6>
+    <panel title="Информация о песне">
+      <v-layout row wrap class="song">
+        <v-flex xs6 class="mt-4">
           <img class="album-image" :src="song.albumImageUrl" alt="Album cover">
           <div class="song-album">
             {{song.album}}
           </div>
         </v-flex>
-        <v-flex xs6>
+        <v-flex xs6 class="mt-4">
           <div class="song-title">
             {{song.title}}
           </div>
@@ -18,39 +18,32 @@
             {{song.genre}}
           </div>
           <v-btn
+            class="teal darken-4 mt-4"
             dark
-            cyan
-            @click="navigateTo({
+            :to="{
               name: 'songs-edit',
-              params: {
-                songId: song.id
+              params() {
+                return {
+                  songId: song.id
+                }
               }
-            })">
-            Edit Song
+            }">
+            Отредактировать
           </v-btn>
         </v-flex>
       </v-layout>
     </panel>
 </template>
 <script>
-import Panel from '@/components/Panel'
 export default {
   props: [
     'song'
-  ],
-  methods: {
-    navigateTo (route) {
-      this.$router.push(route)
-    }
-  },
-  components: {
-    Panel
-  }
+  ]
 }
 </script>
-<style>
+<style scoped>
 .song {
-  height: 400px;
+  height: 300px;
   overflow: hidden;
 }
 .song-title {
@@ -64,8 +57,8 @@ export default {
   font-style: italic;
 }
 .album-image {
-  width: 70%;
-  height: 80%;
+  width: 100%;
+  height: 250px;
   margin: 0 auto;
   object-fit: contain;
 }

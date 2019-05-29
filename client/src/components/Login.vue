@@ -1,16 +1,19 @@
 <template>
-  <panel title="Login">
-    <v-text-field type="email" name="email" v-model="email" label="Email"></v-text-field>
-    <v-text-field type="password" name="password" v-model="password" label="Password"></v-text-field>
-    <div class="error" v-html="error"></div>
-    <v-btn class="cyan" dark @click="login">
-      login
-    </v-btn>
-  </panel>
+<v-layout row justify-center>
+  <v-flex xs6>
+    <panel title="Аутентификация">
+      <v-text-field type="email" name="email" v-model="email" label="Email"></v-text-field>
+      <v-text-field type="password" name="password" v-model="password" label="Пароль"></v-text-field>
+      <div class="error-msg" v-html="error"></div>
+      <v-btn class="teal darken-4" dark @click="login">
+        Вперед
+      </v-btn>
+    </panel>
+  </v-flex>
+</v-layout>
 </template>
 <script>
 import AuthenticationService from '@/services/AuthenticationService'
-import Panel from '@/components/Panel'
 export default {
   name: 'Login',
   data () {
@@ -19,9 +22,6 @@ export default {
       password: '',
       error: null
     }
-  },
-  components: {
-    Panel
   },
   methods: {
     async login () {
@@ -33,7 +33,7 @@ export default {
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setUser', response.data.user)
         this.$router.push({
-          name: 'root'
+          name: 'songs'
         })
       } catch (error) {
         this.error = error.response.data.error
@@ -42,5 +42,11 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
+.error-msg {
+  color: red;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 10px;
+}
 </style>
